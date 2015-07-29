@@ -17,7 +17,7 @@ setup(
 	version='0.1',
 	description='A small set of JSON-related tools.',
 	long_description='',
-	url='https://github.com/damienjones/sculpt.json_tools',
+	url='https://github.com/damienjones/sculpt-json-tools',
 	author='Damien M. Jones',
 	author_email='damien@codesculpture.com',
 	license='LGPLv2',
