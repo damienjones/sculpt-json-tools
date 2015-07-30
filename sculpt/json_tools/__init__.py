@@ -235,13 +235,14 @@ def extract(obj, *args):
 # value to use if the requested item can't be found (no
 # matter where in the path it fails). This is similar to
 # Python's .get() method for dicts. Note that with this
-# method, default must be specified; ø
+# method, default must be specified; if you want a default
+# of None, use extract.
 #
 def extract_default(obj, default, *args):
     for a in args:
         if isinstance(obj, list):
             # should be a numeric index
-            if a >= 0 and a < len(obj):
+            if a >= -len(obj) and a < len(obj):
                 obj = obj[a]
             else:
                 return default
@@ -262,13 +263,78 @@ def extract_default(obj, default, *args):
 
     return obj
 
+# inject into JSON
+#
+# THis is the reverse operation from extract. You may have a
+# JSON-able data structure and you want to modify or create
+# an element deep in the structure, but you're not sure if
+# all of the parent containers are in place. This will create
+# intermediate lists and dicts, stretching lists to the right
+# size if they aren't big enough. (Lists so stretched are
+# padded with None.)
+#
+# The last argument is the value to be injected.
+#
+def inject(obj, *args):
+    if len(args) < 2:
+        raise Exception('inject() requires at least three parameters')
+
+    for i in range(len(args)-1):
+        a = args[i]
+        print repr(obj), a,
+        
+        if isinstance(obj, list):
+            # should be a numeric index
+            if a < -len(obj):
+                obj.insert(0, [ None ] * (-a-len(obj)))
+            elif a >= len(obj):
+                obj.extend([ None ] * (a-len(obj)+1))
+
+        elif isinstance(obj, dict):
+            # could be any kind of key
+            if a not in obj:
+                obj[a] = None
+
+        else:
+            # some other type we can't look into;
+            # fail loudly
+            raise Exception('inject() can\'t look into object of type %s' % obj.__class__.__name__)
+
+        print repr(obj),
+
+        if i == len(args)-2:
+            # last item, just assign it
+            obj[a] = args[i+1]
+
+        else:
+            # make sure the item exists
+            if obj[a] is None:
+                if isinstance(args[i+1], numbers.Number):
+                    # numeric indices suggest a list
+                    obj[a] = []
+                else:
+                    # anything else suggests a dict
+                    obj[a] = {}
+
+        print repr(obj)
+        obj = obj[a]
+
+    return obj
+
 # useful conversion edge case handlers
+# sometimes, using these is clearer than an inline if
 
 # empty_if_none
 # returns the original string, or '' if it's None
 # (this is useful shorthand when s is a complicated expression)
 def empty_if_none(s):
     return s if s != None else ''
+
+# zero_if_none
+# returns the number, or 0 if it's None
+# (this is useful shorthand when s is a complicated expression)
+def zero_if_none(s):
+    return s if s != None else 0
 
 # given a particular string, attempt to parse it as an
 # ISO-format datetime and return that; return None if
