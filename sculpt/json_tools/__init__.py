@@ -281,7 +281,7 @@ def inject(obj, *args):
 
     for i in range(len(args)-1):
         a = args[i]
-        print repr(obj), a,
+        #print repr(obj), a,
         
         if isinstance(obj, list):
             # should be a numeric index
@@ -300,7 +300,7 @@ def inject(obj, *args):
             # fail loudly
             raise Exception('inject() can\'t look into object of type %s' % obj.__class__.__name__)
 
-        print repr(obj),
+        #print repr(obj),
 
         if i == len(args)-2:
             # last item, just assign it
@@ -316,7 +316,7 @@ def inject(obj, *args):
                     # anything else suggests a dict
                     obj[a] = {}
 
-        print repr(obj)
+        #print repr(obj)
         obj = obj[a]
 
     return obj
