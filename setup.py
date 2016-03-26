@@ -14,7 +14,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='sculpt.json_tools',
-    version='0.1',
+    version='1.0',
     description='A small set of JSON-related tools.',
     long_description='',
     url='https://github.com/damienjones/sculpt-json-tools',
@@ -22,7 +22,7 @@ setup(
     author_email='damien@codesculpture.com',
     license='LGPLv2',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
